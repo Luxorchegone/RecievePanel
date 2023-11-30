@@ -60,6 +60,7 @@ function App() {
             showIndicator={true} 
             noDataText='Нет данных'
             itemComponent={SessionTemplate}
+            width={"100%"}
             />
       </div>
     </div>
