@@ -1,20 +1,25 @@
-import { useEffect } from "react";
-import { format } from "date-fns";
+import { useEffect, useRef } from "react";
+import { format, parseISO } from "date-fns";
 
-export const SessionTemplate = (props) => {
+export const SessionTemplate = ({ data, index, selectedIndex }) => {
+  const timer = useRef(null);
+
   useEffect(() => {
-    console.log(props);
+    console.log(data);
+    if ( index == selectedIndex ) {
+
+    }
   }, []);
 
   return (
     <div
-      key={props.index}
+      key={index}
       style={{
         display: "flex",
         flexDirection: "row",
         height: "100%",
         alignItems: "center",
-        padding: '0 60px'
+        padding: "0 60px",
       }}
       className="dx-theme-background-color"
     >
@@ -24,7 +29,7 @@ export const SessionTemplate = (props) => {
           width: "20%",
         }}
       >
-        Дата: {format(props.data.date, 'dd.MM.yyyy')}
+        {`Дата: ${format(parseISO(data.rec_session_beg1), "dd.MM.yyyy HH:mm:ss")}`}
       </p>
       <p
         style={{
@@ -32,7 +37,11 @@ export const SessionTemplate = (props) => {
           width: "35%",
         }}
       >
-        Сеанс через: {format(props.data.remainingTime, "dd 'д.' HH 'ч.' mm 'мин.' ss 'сек.'")}
+        {`Сеанс через: ${format(parseISO(data.rec_session_beg1), "dd.MM.yyyy")}`}
+        {/* {format(
+          data.remainingTime,
+          "dd 'д.' HH 'ч.' mm 'мин.' ss 'сек.'"
+        )} */}
       </p>
       <p
         style={{
@@ -40,15 +49,16 @@ export const SessionTemplate = (props) => {
           width: "25%",
         }}
       >
-        Номер сброса: {props.data.recieveNumber}
+        {`Номер сброса: ${data.cycle_num}` }
       </p>
       <p
         style={{
           margin: 0,
           width: "20%",
         }}
-      >
-        Маршрутов: {props.data.quantityOfRoutes}
+      >{
+        `Маршрутов: ${data.shotparams.length}`
+      }
       </p>
     </div>
   );
