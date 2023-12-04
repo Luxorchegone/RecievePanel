@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { format, parseISO, formatDistanceToNowStrict } from "date-fns";
+import { format, parseISO, intervalToDuration } from "date-fns";
 import { ru } from "date-fns/locale";
 
 export const SessionTemplate = ({
@@ -10,42 +10,40 @@ export const SessionTemplate = ({
   const timer = useRef(null);
   const [remainingTime, setRemainingTime] = useState(null);
 
-  // useEffect(() => {
-  //   console.log(data);
-  //   if (index == selectedIndex) {
-  //     //проверяем, что мы находимся на "выбранном" сеансе
-
-  //     const currentDate = new Date();
-  //     //получаем
-  //   }
-  // }, []);
+  const calculateAndSetRemainingTime = () => {
+    setRemainingTime(() =>
+      intervalToDuration({
+        start: new Date(),
+        end: parseISO(rec_session_beg1),
+      })
+    );
+  };
 
   useEffect(() => {
     if (index == selectedIndex) {
       //проверяем, что мы находимся на "выбранном" сеансе
 
-      const currentDate = new Date();
-      //получаем текущую дату
-
-      if (parseISO(rec_session_beg1) > currentDate) {
+      if (parseISO(rec_session_beg1) > new Date()) {
+        // что бы отсчет начинался сразу после загрузки страницы, делаем инит оставшегося времени
+        if (timer.current == null) {
+          calculateAndSetRemainingTime();
+        }
+        //пересчитываем оставшееся время
         timer.current = setInterval(() => {
-          setRemainingTime(() => parseISO(rec_session_beg1) - currentDate);
-          console.log(
-            typeof formatDistanceToNowStrict(parseISO(rec_session_beg1), {
-              unit: "second",
-              locale: ru,
-            })
-          );
+          calculateAndSetRemainingTime();
+          console.log(`sdfds`);
         }, 2000);
       } else {
+        //если время истекло и таймер id существует, то чистим таймер
         if (timer.current) {
           clearTimeout(timer.current);
-          console.log(`очищено`);
+          setRemainingTime(null)
         }
       }
     }
 
     return () => {
+      //если размонтируемся и таймер id существует, то чистим таймер
       if (timer.current) {
         clearTimeout(timer.current);
       }
@@ -80,10 +78,7 @@ export const SessionTemplate = ({
             width: "35%",
           }}
         >
-          {`Сеанс через: ${format(
-            remainingTime,
-            "dd 'д.' HH 'ч.' mm 'мин.' ss 'сек.'"
-          )}`}
+          {`Сеанс через: ${remainingTime.days} д. ${remainingTime.hours} ч. ${remainingTime.minutes} мин. ${remainingTime.seconds} сек.`}
         </p>
       )}
       <p
