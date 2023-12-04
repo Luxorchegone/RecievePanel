@@ -15,20 +15,25 @@ function App() {
   useEffect(() => {
     // setData(mockData);
     let sessionparams = [];
-    mockData.map((item) => {
-      item?.sessionparams.map?.((sessionItem) => {
-        sessionparams.push({
-          oid_id: item?.oid_id,
-          num_wp: item?.num_wp,
-          ...sessionItem,
-        });
-      });
-    });
-    setData(sessionparams);
-    loadMessages(ruMessages);
-    locale("ru");
-    //COOOOOOORS:(((
-    //fetch('http://10.53.202.251:8009/pkis/jsoninf/get/user/getssv_kf?data={%22t_nach%22:%222023-11-20T10:10:20%22,%22t_konc%22:%222023-11-22T23:10:10%22}').then((data) => console.log(data))
+    fetch('/pkis/jsoninf/get/user/getssv_kf?data={%22t_nach%22:%222023-12-04T10:10:20%22,%22t_konc%22:%222023-12-05T23:10:10%22}')
+        .then(response => response.json())
+        .then(data => {
+            data.map((item) => {
+              item?.sessionparams.map?.((sessionItem) => {
+                sessionparams.push({
+                  oid_id: item?.oid_id,
+                  num_wp: item?.num_wp,
+                  ...sessionItem,
+                });
+              });
+            });
+            console.log(sessionparams)
+            setData(sessionparams);
+            loadMessages(ruMessages);
+            locale("ru");
+        })
+        .catch(error => console.error(error));
+
   }, []);
 
   return (
