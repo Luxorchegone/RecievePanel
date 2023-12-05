@@ -37,3 +37,11 @@
 .read-the-docs {
   color: #888;
 }
+
+.sessionBlock {
+  border-top: 1px solid #eee;
+}
+.settingsBlock {
+  border-bottom: 1px solid #eee;
+  color: #fff;
+}

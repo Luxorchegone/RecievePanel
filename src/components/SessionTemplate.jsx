@@ -31,7 +31,6 @@ export const SessionTemplate = ({
         //пересчитываем оставшееся время
         timer.current = setInterval(() => {
           calculateAndSetRemainingTime();
-          console.log(`sdfds`);
         }, 2000);
       } else {
         //если время истекло и таймер id существует, то чистим таймер
